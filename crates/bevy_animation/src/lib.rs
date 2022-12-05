@@ -121,7 +121,8 @@ pub struct AnimationPlayer {
     pub end_frame: usize,
     pub frames_count: usize,
     pub transition_duration: f32,
-    pub lerp: f32
+    pub lerp: f32,
+    pub animation_type: AnimationType
 }
 
 impl Default for AnimationPlayer {
@@ -136,7 +137,8 @@ impl Default for AnimationPlayer {
             end_frame: 1,
             frames_count: 1, // assume at least one
             transition_duration: 1.0,
-            lerp: 0.0
+            lerp: 0.0,
+            animation_type: AnimationType::Lerp
         }
     }
 }
@@ -293,20 +295,23 @@ pub fn animation_player(
                                     rot_end = -rot_end;
                                 }
                                 // Rotations are using a spherical linear interpolation
-                                transform.rotation =
-                                    rot_start.normalize().tween_bounce_in(rot_end.normalize(), lerp);
+                                transform.rotation = tween(player.animation_type, rot_start, rot_end, lerp);
+                                // transform.rotation =
+                                    // rot_start.normalize().tween_bounce_in(rot_end.normalize(), lerp);
                             }
                             Keyframes::Translation(keyframes) => {
                                 let translation_start = keyframes[step_start];
                                 let translation_end = keyframes[step_end];
-                                let result = translation_start.tween_bounce_in(translation_end, lerp);
-                                transform.translation = result;
+                                transform.translation = tween(player.animation_type, translation_start, translation_end, lerp);
+                                // let result = translation_start.tween_bounce_in(translation_end, lerp);
+                                // transform.translation = result;
                             }
                             Keyframes::Scale(keyframes) => {
                                 let scale_start = keyframes[step_start];
                                 let scale_end = keyframes[step_end];
-                                let result = scale_start.tween_bounce_in(scale_end, lerp);
-                                transform.scale = result;
+                                transform.scale = tween(player.animation_type, scale_start, scale_end, lerp);
+                                // let result = scale_start.tween_bounce_in(scale_end, lerp);
+                                // transform.scale = result;
                             }
                         }
                     }

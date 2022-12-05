@@ -1,4 +1,5 @@
 use bevy_math::{Quat, Vec3};
+use bevy_reflect::Reflect;
 
 pub trait Tweening {
     fn tween_linear(self, end: Self, t: f32) -> Self;
@@ -54,7 +55,7 @@ pub trait Tweening {
     fn tween_sine_out_in(self, end: Self, t: f32) -> Self;
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Reflect, PartialEq, Debug)]
 pub enum AnimationType {
     Lerp,
     Slerp,
@@ -115,7 +116,6 @@ pub fn tween<T: Tweening>(animation_type: AnimationType, start: T, end: T, t: f3
         AnimationType::Lerp => start.tween_linear(end, t),
         AnimationType::Slerp => start.tween_linear(end, t), //start.slerp(end, lerper),
         AnimationType::CubicIn => start.tween_cubic_in(end, t),
-
         AnimationType::CubicOut => start.tween_cubic_out(end, t),
         AnimationType::CubicInOut => start.tween_cubic_in_out(end, t),
         AnimationType::CubicOutIn => start.tween_cubic_in_out(end, t),
