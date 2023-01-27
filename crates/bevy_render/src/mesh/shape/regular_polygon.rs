@@ -41,14 +41,14 @@ impl From<RegularPolygon> for Mesh {
             let theta = std::f32::consts::FRAC_PI_2 - i as f32 * step;
             let (sin, cos) = theta.sin_cos();
 
-            positions.push([cos * radius, sin * radius, 0.0]);
-            normals.push([0.0, 0.0, 1.0]);
+            positions.push([cos * radius,  0.0, sin * radius]);
+            normals.push([0.0, 1.0, 0.0]);
             uvs.push([0.5 * (cos + 1.0), 1.0 - 0.5 * (sin + 1.0)]);
         }
 
         let mut indices = Vec::with_capacity((sides - 2) * 3);
         for i in 1..(sides as u32 - 1) {
-            indices.extend_from_slice(&[0, i + 1, i]);
+            indices.extend_from_slice(&[0, i, i + 1]);
         }
 
         let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
